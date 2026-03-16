@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${producto.nombre} + ' - Cristabel de Viaje'"></title>
+
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container producto-detalle">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <img th:src="@{'/img/' + ${producto.imagen}}" class="img-fluid img-detalle shadow" th:alt="${producto.nombre}">
+        </div>
+
+        <div class="col-md-6">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Tienda</a></li>
+                    <li class="breadcrumb-item active" th:text="${producto.categoria.nombre}">Categoría</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-4 fw-bold" th:text="${producto.nombre}">Nombre</h1>
+            <p class="lead mt-3" th:text="${producto.descripcion}">Descripción</p>
+
+            <div class="my-4">
+                <h2 class="precio-grande fw-bold" th:text="${producto.precio} + ' €'">0.00 €</h2>
+            </div>
+
+            <div class="d-grid gap-3">
+                <form th:action="@{/carrito/add}" method="post">
+                    <input type="hidden" name="id" th:value="${producto.id}">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 w-100">
+                        🛒 Añadir al carrito
+                    </button>
+                </form>
+                <a href="/" class="btn btn-outline-secondary">Volver a la tienda</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

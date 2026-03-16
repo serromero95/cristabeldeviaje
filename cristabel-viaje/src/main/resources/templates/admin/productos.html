@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor">
+    <h1>Gestión de Productos (Panel Admin)</h1>
+
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead style="background-color: #333; color: white;">
+        <tr>
+            <th>ID</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${productos}" style="text-align: center;">
+            <td th:text="${p.id}"></td>
+            <td><img th:src="@{'/img/' + ${p.imagen}}" style="height: 50px;"></td>
+            <td th:text="${p.nombre}"></td>
+            <td th:text="${p.precio + ' €'}"></td>
+            <td th:text="${p.stock}"></td>
+            <td>
+                <a th:href="@{/admin/productos/delete/{id}(id=${p.id})}"
+                   onclick="return confirm('¿Seguro que quieres eliminar este producto?')"
+                   style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 20px;">
+        <a href="/" class="volver">← Volver a la tienda pública</a>
+    </p>
+</main>
+</body>
+</html>

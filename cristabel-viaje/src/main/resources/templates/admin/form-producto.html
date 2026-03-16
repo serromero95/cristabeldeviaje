@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Producto</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor" style="max-width: 600px; margin: auto; padding: 20px;">
+    <h1 th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}"></h1>
+
+    <form th:action="@{/admin/productos/save}" th:object="${producto}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <div style="margin-bottom: 15px;">
+            <label>Nombre del Producto:</label>
+            <input type="text" th:field="*{nombre}" required style="width: 100%; padding: 8px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Descripción:</label>
+            <textarea th:field="*{descripcion}" style="width: 100%; padding: 8px;" rows="4"></textarea>
+        </div>
+
+        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Precio (€):</label>
+                <input type="number" step="0.01" th:field="*{precio}" required style="width: 100%; padding: 8px;">
+            </div>
+            <div style="flex: 1;">
+                <label>Stock:</label>
+                <input type="number" th:field="*{stock}" required style="width: 100%; padding: 8px;">
+            </div>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Categoría:</label>
+            <select th:field="*{categoria}" required style="width: 100%; padding: 8px;">
+                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label>Nombre de la imagen (ej: bota.jpg):</label>
+            <input type="text" th:field="*{imagen}" style="width: 100%; padding: 8px;">
+        </div>
+
+        <button type="submit" class="boton-carrito" style="width: 100%; padding: 10px; border: none; cursor: pointer;">
+            Guardar Producto
+        </button>
+        <p style="text-align: center; margin-top: 15px;">
+            <a th:href="@{/admin/productos}">Cancelar y volver</a>
+        </p>
+    </form>
+</main>
+</body>
+</html>

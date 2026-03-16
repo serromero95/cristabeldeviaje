@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="contenedor" style="max-width: 400px; margin: auto; padding: 20px;">
+    <h2>Acceso de Usuarios</h2>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+    <p th:if="${param.success}" style="color: green;">Registro correcto. Ya puedes entrar.</p>
+
+    <form th:action="@{/login}" method="post">
+        <div style="margin-bottom: 15px;">
+            <label>Email:</label><br>
+            <input type="email" name="email" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label>Contraseña:</label><br>
+            <input type="password" name="password" required style="width: 100%;">
+        </div>
+        <button type="submit" class="boton-detalle" style="width: 100%; cursor: pointer;">Entrar</button>
+    </form>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<header th:fragment="navbar" class="topbar">
+  <div class="contenedor-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #333; color: white;">
+
+    <div class="logo-centro">
+      <a th:href="@{/}" style="color: white; text-decoration: none; display: flex; align-items: center;">
+        <img th:src="@{/img/logo.png}" alt="Logo" style="height: 40px; margin-right: 10px;">
+        <span style="font-weight: bold; font-size: 1.2rem;">Tienda de Senderismo</span>
+      </a>
+    </div>
+
+    <nav class="enlaces-superiores">
+      <a th:href="@{/carrito}" style="color: #5bc0de; margin-right: 15px; text-decoration: none; font-weight: bold;">
+        🛒 Carrito <span th:if="${session.carrito != null}" th:text="'(' + ${session.carrito.size()} + ')'"></span>
+      </a> |
+
+      <span th:if="${session.usuario_nombre == null}">
+            <a th:href="@{/login}" style="color: white; margin-left: 15px;">Iniciar sesión</a> |
+            <a th:href="@{/register}" style="color: white; margin-left: 5px;">Registrarse</a>
+      </span>
+
+      <span th:if="${session.usuario_nombre != null}">
+            Hola, <strong th:text="${session.usuario_nombre}">Usuario</strong> |
+            <a th:href="@{/mis-pedidos}" style="color: white; margin-left: 10px;">Mis pedidos</a> |
+
+            <span th:if="${session.usuario_rol == 'admin'}">
+                <a th:href="@{/admin/productos}" style="color: #ffc107; margin-left: 10px; font-weight: bold;">Panel Admin</a> |
+            </span>
+
+            <a th:href="@{/logout}" style="color: #ff6b6b; margin-left: 10px;">Cerrar sesión</a>
+      </span>
+    </nav>
+  </div>
+</header>
+
+</body>
+</html>

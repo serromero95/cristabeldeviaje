@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Pedidos</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor">
+    <h1>Gestión de Pedidos</h1>
+
+    <div th:if="${#lists.isEmpty(pedidos)}">
+        <p>No hay pedidos registrados.</p>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(pedidos)}" border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead style="background-color: #f4f4f4;">
+        <tr>
+            <th style="padding: 10px;">ID Pedido</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado actual</th>
+            <th>Cambiar estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${pedidos}" style="text-align: center;">
+            <td style="padding: 10px;" th:text="${p.id}"></td>
+            <td th:text="${p.usuario.email}"></td>
+            <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+            <td th:text="${#numbers.formatDecimal(p.total, 1, 2) + ' €'}"></td>
+            <td th:text="${p.estado}"></td>
+            <td>
+                <form th:action="@{/admin/pedidos/estado}" method="post" style="display: flex; justify-content: center; gap: 10px;">
+                    <input type="hidden" name="id" th:value="${p.id}">
+
+                    <select name="estado">
+                        <option value="pendiente" th:selected="${p.estado == 'pendiente'}">Pendiente</option>
+                        <option value="enviado" th:selected="${p.estado == 'enviado'}">Enviado</option>
+                        <option value="entregado" th:selected="${p.estado == 'entregado'}">Entregado</option>
+                    </select>
+
+                    <button type="submit">Guardar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 30px;">
+        <a href="/" class="volver">← Volver a la tienda</a>
+    </p>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

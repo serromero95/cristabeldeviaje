@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mis Pedidos - Tienda de Senderismo</title>
-
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -22,33 +20,61 @@
         <a href="/" class="boton-detalle">Ir a la tienda</a>
     </div>
 
-    <table th:if="${not #lists.isEmpty(pedidos)}" border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #f4f4f4;">
-        <tr>
-            <th style="padding: 10px;">ID Pedido</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Estado</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${pedidos}" style="text-align: center;">
-            <td style="padding: 10px;" th:text="${p.id}"></td>
-            <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></td>
-            <td th:text="${#numbers.formatDecimal(p.total, 1, 2) + ' €'}"></td>
-            <td>
-                        <span th:text="${p.estado}"
-                              th:style="${p.estado == 'pendiente' ? 'color: orange; font-weight: bold;' : 'color: green;'}">
-                        </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="${not #lists.isEmpty(pedidos)}" th:each="p : ${pedidos}"
+         style="border: 1px solid #ddd; padding: 20px; margin-top: 20px; border-radius: 8px; background-color: #fff;">
+
+        <h3 style="margin-top: 0;">Pedido #<span th:text="${p.id}"></span></h3>
+
+        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Total:</strong> <span th:text="${#numbers.formatDecimal(p.total, 1, 2) + ' €'}"></span></p>
+        <p>
+            <strong>Estado:</strong>
+            <span th:text="${p.estado}"
+                  th:style="${p.estado == 'pendiente' ? 'color: orange; font-weight: bold;' :
+                            (p.estado == 'enviado' ? 'color: blue; font-weight: bold;' :
+                            'color: green; font-weight: bold;')}">
+            </span>
+        </p>
+
+        <h4>Productos del pedido</h4>
+
+        <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: left;">
+            <thead>
+            <tr>
+                <th style="padding: 10px;">Producto</th>
+                <th>Opciones</th>
+                <th>Cantidad</th>
+                <th>Precio unitario</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detalle : ${p.detalles}">
+                <td style="padding: 10px;" th:text="${detalle.producto.nombre}"></td>
+                <td>
+                    <div th:if="${detalle.talla != null and !#strings.isEmpty(detalle.talla)}">
+                        <strong>Talla:</strong> <span th:text="${detalle.talla}"></span>
+                    </div>
+                    <div th:if="${detalle.color != null and !#strings.isEmpty(detalle.color)}">
+                        <strong>Color:</strong> <span th:text="${detalle.color}"></span>
+                    </div>
+                    <div th:if="${(detalle.talla == null or #strings.isEmpty(detalle.talla)) and (detalle.color == null or #strings.isEmpty(detalle.color))}">
+                        Sin opciones
+                    </div>
+                </td>
+                <td th:text="${detalle.cantidad}"></td>
+                <td th:text="${#numbers.formatDecimal(detalle.precio, 1, 2) + ' €'}"></td>
+                <td th:text="${#numbers.formatDecimal(detalle.precio * detalle.cantidad, 1, 2) + ' €'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <p style="margin-top: 30px;">
         <a href="/" class="volver">← Volver a la tienda</a>
     </p>
 </main>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

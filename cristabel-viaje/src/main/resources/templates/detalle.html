@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${producto.nombre} + ' - Cristabel de Viaje'"></title>
-
     <th:block th:replace="~{fragments/head :: head}"></th:block>
-
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -28,21 +26,51 @@
             <p class="lead mt-3" th:text="${producto.descripcion}">Descripción</p>
 
             <div class="my-4">
-                <h2 class="precio-grande fw-bold" th:text="${producto.precio} + ' €'">0.00 €</h2>
+                <h2 class="precio-grande fw-bold" th:text="${#numbers.formatDecimal(producto.precio, 1, 2) + ' €'}">0.00 €</h2>
             </div>
 
             <div class="d-grid gap-3">
                 <form th:action="@{/carrito/add}" method="post">
                     <input type="hidden" name="id" th:value="${producto.id}">
+
+                    <div th:if="${producto.tallas != null and !#strings.isEmpty(producto.tallas)}" style="margin-bottom: 15px;">
+                        <label for="talla" style="display: block; margin-bottom: 6px; font-weight: 600;">Talla</label>
+                        <select name="talla" id="talla" style="width: 100%;">
+                            <option value="">Selecciona una talla</option>
+                            <option th:each="talla : ${#strings.arraySplit(producto.tallas, ',')}"
+                                    th:value="${#strings.trim(talla)}"
+                                    th:text="${#strings.trim(talla)}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div th:if="${producto.colores != null and !#strings.isEmpty(producto.colores)}" style="margin-bottom: 15px;">
+                        <label for="color" style="display: block; margin-bottom: 6px; font-weight: 600;">Color</label>
+                        <select name="color" id="color" style="width: 100%;">
+                            <option value="">Selecciona un color</option>
+                            <option th:each="color : ${#strings.arraySplit(producto.colores, ',')}"
+                                    th:value="${#strings.trim(color)}"
+                                    th:text="${#strings.trim(color)}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label for="cantidad" style="display: block; margin-bottom: 6px; font-weight: 600;">Cantidad</label>
+                        <input type="number" id="cantidad" name="cantidad" min="1" value="1" style="width: 100px;">
+                    </div>
+
                     <button type="submit" class="btn btn-primary btn-lg px-5 w-100">
                         🛒 Añadir al carrito
                     </button>
                 </form>
+
                 <a href="/" class="btn btn-outline-secondary">Volver a la tienda</a>
             </div>
         </div>
     </div>
 </div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

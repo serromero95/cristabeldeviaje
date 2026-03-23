@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel de Administración</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -11,36 +11,59 @@
 <main class="contenedor">
     <h1>Gestión de Productos (Panel Admin)</h1>
 
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead style="background-color: #333; color: white;">
-        <tr>
-            <th>ID</th>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="p : ${productos}" style="text-align: center;">
-            <td th:text="${p.id}"></td>
-            <td><img th:src="@{'/img/' + ${p.imagen}}" style="height: 50px;"></td>
-            <td th:text="${p.nombre}"></td>
-            <td th:text="${p.precio + ' €'}"></td>
-            <td th:text="${p.stock}"></td>
-            <td>
-                <a th:href="@{/admin/productos/delete/{id}(id=${p.id})}"
-                   onclick="return confirm('¿Seguro que quieres eliminar este producto?')"
-                   style="color: red; font-weight: bold; text-decoration: none;">Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <p style="margin: 20px 0;">
+        <a th:href="@{/admin/productos/nuevo}" class="btn-admin">
+            + Nuevo producto
+        </a>
+    </p>
+
+    <div class="caja-blanca sombra-suave" style="margin-top: 20px;">
+        <div th:if="${#lists.isEmpty(productos)}">
+            <p>No hay productos registrados.</p>
+        </div>
+
+        <table th:if="${not #lists.isEmpty(productos)}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${productos}">
+                <td th:text="${p.id}"></td>
+                <td>
+                    <img th:src="@{'/img/' + ${p.imagen}}" alt="Imagen producto" style="height: 60px; border-radius: 8px;">
+                </td>
+                <td th:text="${p.nombre}"></td>
+                <td th:text="${#numbers.formatDecimal(p.precio, 1, 2) + ' €'}"></td>
+                <td th:text="${p.stock}"></td>
+                <td>
+                    <a th:href="@{/admin/productos/edit/{id}(id=${p.id})}"
+                       style="margin-right: 12px; color: #2196F3; font-weight: 600;">
+                        Editar
+                    </a>
+
+                    <a th:href="@{/admin/productos/delete/{id}(id=${p.id})}"
+                       onclick="return confirm('¿Seguro que quieres eliminar este producto?')"
+                       style="color: #e53935; font-weight: 600;">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <p style="margin-top: 20px;">
         <a href="/" class="volver">← Volver a la tienda pública</a>
     </p>
 </main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

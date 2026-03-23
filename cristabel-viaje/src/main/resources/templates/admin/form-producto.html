@@ -3,57 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Producto</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="contenedor" style="max-width: 600px; margin: auto; padding: 20px;">
-    <h1 th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}"></h1>
+<main class="contenedor">
+    <div class="caja-blanca sombra-suave" style="max-width: 700px; margin: 40px auto;">
 
-    <form th:action="@{/admin/productos/save}" th:object="${producto}" method="post">
-        <input type="hidden" th:field="*{id}">
+        <h1 style="margin-bottom: 25px;"
+            th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}"></h1>
 
-        <div style="margin-bottom: 15px;">
-            <label>Nombre del Producto:</label>
-            <input type="text" th:field="*{nombre}" required style="width: 100%; padding: 8px;">
-        </div>
+        <form th:action="@{/admin/productos/save}"
+              th:object="${producto}"
+              method="post"
+              enctype="multipart/form-data">
 
-        <div style="margin-bottom: 15px;">
-            <label>Descripción:</label>
-            <textarea th:field="*{descripcion}" style="width: 100%; padding: 8px;" rows="4"></textarea>
-        </div>
+            <input type="hidden" th:field="*{id}">
 
-        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-            <div style="flex: 1;">
-                <label>Precio (€):</label>
-                <input type="number" step="0.01" th:field="*{precio}" required style="width: 100%; padding: 8px;">
+            <div style="margin-bottom: 15px;">
+                <label>Nombre del Producto:</label>
+                <input type="text" th:field="*{nombre}" required style="width: 100%;">
             </div>
-            <div style="flex: 1;">
-                <label>Stock:</label>
-                <input type="number" th:field="*{stock}" required style="width: 100%; padding: 8px;">
+
+            <div style="margin-bottom: 15px;">
+                <label>Descripción:</label>
+                <textarea th:field="*{descripcion}" rows="4" style="width: 100%;"></textarea>
             </div>
-        </div>
 
-        <div style="margin-bottom: 15px;">
-            <label>Categoría:</label>
-            <select th:field="*{categoria}" required style="width: 100%; padding: 8px;">
-                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
-            </select>
-        </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label>Precio (€):</label>
+                    <input type="number" step="0.01" th:field="*{precio}" required style="width: 100%;">
+                </div>
 
-        <div style="margin-bottom: 20px;">
-            <label>Nombre de la imagen (ej: bota.jpg):</label>
-            <input type="text" th:field="*{imagen}" style="width: 100%; padding: 8px;">
-        </div>
+                <div style="flex: 1;">
+                    <label>Stock:</label>
+                    <input type="number" th:field="*{stock}" required style="width: 100%;">
+                </div>
+            </div>
 
-        <button type="submit" class="boton-carrito" style="width: 100%; padding: 10px; border: none; cursor: pointer;">
-            Guardar Producto
-        </button>
-        <p style="text-align: center; margin-top: 15px;">
-            <a th:href="@{/admin/productos}">Cancelar y volver</a>
-        </p>
-    </form>
+            <div style="margin-bottom: 15px;">
+                <label>Tallas disponibles (separadas por comas):</label>
+                <input type="text" th:field="*{tallas}" placeholder="Ej: S,M,L,XL" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label>Colores disponibles (separados por comas):</label>
+                <input type="text" th:field="*{colores}" placeholder="Ej: Negro,Verde,Azul" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label>Categoría:</label>
+                <select th:field="*{categoria}" required style="width: 100%;">
+                    <option th:each="cat : ${categorias}"
+                            th:value="${cat.id}"
+                            th:text="${cat.nombre}">
+                    </option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Subir imagen:</label>
+                <input type="file" name="archivoImagen" accept="image/*" style="width: 100%;">
+
+                <p th:if="${producto.imagen != null and !#strings.isEmpty(producto.imagen)}"
+                   style="margin-top: 10px; font-size: 0.95rem; color: #666;">
+                    Imagen actual: <span th:text="${producto.imagen}"></span>
+                </p>
+            </div>
+
+            <button type="submit" class="btn-admin" style="width: 100%;">
+                Guardar Producto
+            </button>
+
+            <p style="text-align: center; margin-top: 20px;">
+                <a th:href="@{/admin/productos}" class="btn-outline-secondary">
+                    Cancelar
+                </a>
+            </p>
+        </form>
+    </div>
 </main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

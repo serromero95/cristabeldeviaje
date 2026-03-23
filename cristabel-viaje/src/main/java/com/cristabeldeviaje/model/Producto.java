@@ -24,9 +24,15 @@ public class Producto implements Serializable {
 
     private Double precio;
 
-    private Integer stock; // Campo nuevo para el CRUD de admin
+    private Integer stock;
 
     private String imagen;
+
+    @Column(length = 255)
+    private String tallas;
+
+    @Column(length = 255)
+    private String colores;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")

@@ -3,8 +3,22 @@
 ========================= */
 
 body{
-    background:#f5f5f5; /* gris roca claro */
-    font-family: 'Roboto', Arial, sans-serif;
+    background:#F5F5F5;
+    font-family:'Roboto', 'Open Sans', Arial, sans-serif;
+    color:#333333;
+}
+
+a{
+    text-decoration:none;
+    transition:0.2s ease;
+}
+
+a:hover{
+    text-decoration:none;
+}
+
+main{
+    padding:30px 15px;
 }
 
 
@@ -13,15 +27,17 @@ body{
 ========================= */
 
 .navbar{
-    background-color:#2f5d50; /* verde bosque */
+    background-color:#2E7D32;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
 .navbar a{
     color:white !important;
+    font-weight:500;
 }
 
 .navbar a:hover{
-    color:#d8e3dc !important;
+    color:#DDEEDF !important;
 }
 
 
@@ -29,9 +45,19 @@ body{
    TITULOS
 ========================= */
 
-h1,h2,h3{
-    font-weight:600;
-    color:#2f3e34;
+h1,h2,h3,h4{
+    font-weight:700;
+    color:#2F3E34;
+}
+
+
+/* =========================
+   CONTENEDORES
+========================= */
+
+.contenedor{
+    max-width:1100px;
+    margin:auto;
 }
 
 
@@ -40,15 +66,17 @@ h1,h2,h3{
 ========================= */
 
 .card{
-    border-radius:12px;
+    background:#ffffff;
+    border-radius:16px;
     border:none;
     overflow:hidden;
-    transition:0.2s;
+    transition:0.25s ease;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
 }
 
 .card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 12px 25px rgba(0,0,0,0.15);
+    transform:translateY(-6px);
+    box-shadow:0 14px 28px rgba(0,0,0,0.14);
 }
 
 .card-img-top{
@@ -62,13 +90,20 @@ h1,h2,h3{
 
 
 /* =========================
-   PRECIO
+   PRECIOS
 ========================= */
 
 .text-primary{
-    color:#3b6b4c !important; /* verde montaña */
+    color:#2E7D32 !important;
     font-size:1.3rem;
-    font-weight:bold;
+    font-weight:700;
+}
+
+.precio-grande{
+    font-size:2.8rem;
+    color:#2E7D32;
+    margin-top:20px;
+    font-weight:700;
 }
 
 
@@ -76,23 +111,43 @@ h1,h2,h3{
    BOTONES
 ========================= */
 
-.btn-primary{
-    background:#6b4f3b; /* marrón tierra */
+.btn-primary,
+.boton-carrito,
+.boton-detalle{
+    background:#4CAF50;
     border:none;
+    color:white;
+    border-radius:10px;
+    padding:10px 18px;
+    font-weight:600;
+    display:inline-block;
+    transition:0.2s ease;
 }
 
-.btn-primary:hover{
-    background:#523a2a;
+.btn-primary:hover,
+.boton-carrito:hover,
+.boton-detalle:hover{
+    background:#388E3C;
+    color:white;
 }
 
 .btn-outline-secondary{
-    border-color:#6b4f3b;
-    color:#6b4f3b;
+    border:2px solid #6D4C41;
+    color:#6D4C41;
+    background:transparent;
+    border-radius:10px;
+    padding:10px 18px;
+    font-weight:600;
+    margin-top:10px;
 }
 
 .btn-outline-secondary:hover{
-    background:#6b4f3b;
+    background:#6D4C41;
     color:white;
+}
+
+.btn-lg{
+    border-radius:10px;
 }
 
 
@@ -100,15 +155,24 @@ h1,h2,h3{
    DETALLE PRODUCTO
 ========================= */
 
+.producto-detalle{
+    background:white;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    margin-top:40px;
+}
+
+.producto-detalle img{
+    background:#F7F7F7;
+    padding:20px;
+    border-radius:12px;
+}
+
 .img-detalle{
     max-height:500px;
     object-fit:contain;
     border-radius:8px;
-}
-
-.precio-grande{
-    font-size:2.6rem;
-    color:#3b6b4c;
 }
 
 
@@ -116,33 +180,71 @@ h1,h2,h3{
    FORMULARIOS
 ========================= */
 
-input{
-    padding:8px;
-    border-radius:6px;
-    border:1px solid #ccc;
+input,
+textarea,
+select{
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #CCCCCC;
+    background:white;
 }
 
-input:focus{
-    border-color:#3b6b4c;
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#4CAF50;
     outline:none;
+    box-shadow:0 0 0 3px rgba(76, 175, 80, 0.15);
 }
 
 
 /* =========================
-   TABLAS (CARRITO / PEDIDOS)
+   TABLAS
 ========================= */
 
 table{
+    width:100%;
     background:white;
+    border-collapse:collapse;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
 }
 
 thead{
-    background:#2f5d50;
+    background:#2E7D32;
     color:white;
 }
 
+th,
+td{
+    padding:12px 14px;
+    text-align:left;
+    border-bottom:1px solid #E0E0E0;
+}
+
 tbody tr:hover{
-    background:#f0f4f2;
+    background:#F7FAF7;
+}
+
+
+/* =========================
+   BADGES / ESTADOS
+========================= */
+
+.estado-pendiente{
+    color:#FF9800;
+    font-weight:700;
+}
+
+.estado-enviado{
+    color:#2196F3;
+    font-weight:700;
+}
+
+.estado-entregado{
+    color:#4CAF50;
+    font-weight:700;
 }
 
 
@@ -151,55 +253,43 @@ tbody tr:hover{
 ========================= */
 
 footer{
-    background:#f5f5f5;
-    color:#666;
+    background:#F5F5F5;
+    color:#666666;
+    padding:20px 0;
 }
 
 
 /* =========================
-   CONTENEDORES
+   UTILIDADES
 ========================= */
 
-.contenedor{
-    max-width:1100px;
-    margin:auto;
-}
-
-/* =========================
-   AIRE A LA IMAGEN DE DETALLE
-========================= */
-
-.producto-detalle{
-    background:white;
-    padding:40px;
-    border-radius:12px;
+.sombra-suave{
     box-shadow:0 6px 20px rgba(0,0,0,0.08);
-    margin-top:40px;
 }
 
-.producto-detalle img{
-    background:#f7f7f7;
+.caja-blanca{
+    background:#ffffff;
+    border-radius:16px;
     padding:20px;
 }
 
 /* =========================
-   PRECIO
+   BOTÓN ADMIN (NUEVO)
 ========================= */
 
-.precio-grande{
-    font-size:2.8rem;
-    color:#2c3e50;
-    margin-top:20px;
+.btn-admin{
+    background:#2E7D32;
+    color:white !important;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:600;
+    display:inline-block;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    transition:0.2s ease;
 }
 
-/* =========================
-   BOTONES
-========================= */
-
-.btn-lg{
-    border-radius:8px;
-}
-
-.btn-outline-secondary{
-    margin-top:10px;
+.btn-admin:hover{
+    background:#1B5E20;
+    color:white !important;
+    transform:translateY(-2px);
 }

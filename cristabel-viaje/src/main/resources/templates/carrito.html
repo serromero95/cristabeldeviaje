@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Mi Carrito - Tienda de Senderismo</title>
-
   <th:block th:replace="~{fragments/head :: head}"></th:block>
-
 </head>
 <body>
 
@@ -20,17 +18,18 @@
     Por favor, revisa las cantidades o contacta con nosotros.
   </div>
 
-  <div th:if="${items == null or items.isEmpty()}" style="text-align: center; padding: 50px;">
+  <div th:if="${items == null or #lists.isEmpty(items)}" style="text-align: center; padding: 50px;">
     <p style="font-size: 1.2rem;">Tu carrito está vacío.</p>
     <a th:href="@{/}" class="boton-detalle" style="text-decoration: none; padding: 10px 20px;">Ir a la tienda</a>
   </div>
 
-  <div th:if="${items != null and !items.isEmpty()}">
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-      <thead style="background: #333; color: white;">
+  <div th:if="${items != null and !#lists.isEmpty(items)}">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: left;">
+      <thead>
       <tr>
         <th style="padding: 12px;">Producto</th>
         <th>Precio</th>
+        <th>Opciones</th>
         <th>Cantidad</th>
         <th>Subtotal</th>
         <th>Acción</th>
@@ -38,21 +37,39 @@
       </thead>
 
       <tbody>
-      <tr th:each="entry : ${items}" style="text-align: center;">
-        <td style="padding: 10px; display: flex; align-items: center; justify-content: center;">
-          <img th:src="@{'/img/' + ${entry.key.imagen}}" style="height: 50px; margin-right: 15px;">
-          <span th:text="${entry.key.nombre}"></span>
+      <tr th:each="item : ${items}">
+        <td style="padding: 10px; display: flex; align-items: center; gap: 15px;">
+          <img th:src="@{'/img/' + ${item.producto.imagen}}" style="height: 50px;">
+          <span th:text="${item.producto.nombre}"></span>
         </td>
 
-        <td th:text="${entry.key.precio + ' €'}"></td>
+        <td th:text="${#numbers.formatDecimal(item.producto.precio, 1, 2) + ' €'}"></td>
 
-        <td th:text="${entry.value}"></td>
+        <td>
+          <div th:if="${item.talla != null}">
+            <strong>Talla:</strong> <span th:text="${item.talla}"></span>
+          </div>
+          <div th:if="${item.color != null}">
+            <strong>Color:</strong> <span th:text="${item.color}"></span>
+          </div>
+          <div th:if="${item.talla == null and item.color == null}">
+            Sin opciones
+          </div>
+        </td>
 
-        <td th:text="${#numbers.formatDecimal(entry.key.precio * entry.value, 1, 2) + ' €'}"
+        <td>
+          <form th:action="@{/carrito/actualizar}" method="post" style="display: flex; align-items: center; gap: 10px;">
+            <input type="hidden" name="clave" th:value="${item.clave}">
+            <input type="number" name="cantidad" min="1" th:value="${item.cantidad}" style="width: 70px;">
+            <button type="submit" class="btn-primary" style="padding: 6px 12px;">Actualizar</button>
+          </form>
+        </td>
+
+        <td th:text="${#numbers.formatDecimal(item.subtotal, 1, 2) + ' €'}"
             style="font-weight: bold;"></td>
 
         <td>
-          <a th:href="@{/carrito/eliminar/{id}(id=${entry.key.id})}"
+          <a th:href="@{/carrito/eliminar(clave=${item.clave})}"
              style="color: #ff6b6b; text-decoration: none; font-weight: bold;">
             Eliminar
           </a>

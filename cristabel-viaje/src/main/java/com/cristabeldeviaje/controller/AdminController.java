@@ -8,6 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.cristabeldeviaje.model.Pedido;
+import com.cristabeldeviaje.repository.PedidoRepository;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/admin")
@@ -18,6 +26,9 @@ public class AdminController {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     // 1. READ: Listado de productos
     @GetMapping("/productos")
@@ -54,9 +65,55 @@ public class AdminController {
 
     // PROCESAR GUARDADO (Sirve tanto para Crear como para Editar)
     @PostMapping("/productos/save")
-    public String guardarProducto(@ModelAttribute Producto producto, HttpSession session) {
+    public String guardarProducto(@ModelAttribute Producto producto,
+                                  @RequestParam("archivoImagen") MultipartFile archivoImagen,
+                                  HttpSession session) {
+
         String rol = (String) session.getAttribute("usuario_rol");
         if (rol == null || !rol.equals("admin")) return "redirect:/";
+
+        if (producto.getId() != null) {
+            Producto existente = productoRepository.findById(producto.getId()).orElse(null);
+            if (existente != null && (archivoImagen == null || archivoImagen.isEmpty())) {
+                producto.setImagen(existente.getImagen());
+            }
+        }
+
+        if (archivoImagen != null && !archivoImagen.isEmpty()) {
+            try {
+                String nombreOriginal = archivoImagen.getOriginalFilename();
+                String extension = "";
+
+                if (nombreOriginal != null && nombreOriginal.contains(".")) {
+                    extension = nombreOriginal.substring(nombreOriginal.lastIndexOf("."));
+                }
+
+                String nombreArchivo = System.currentTimeMillis() + extension;
+
+                // Leer bytes una sola vez
+                byte[] bytes = archivoImagen.getBytes();
+
+                // RUTA 1 → target
+                String dirTarget = System.getProperty("user.dir") + "/cristabel-viaje/target/classes/static/img/";
+                Path rutaTarget = Paths.get(dirTarget);
+                Files.createDirectories(rutaTarget);
+                Path archivoTarget = rutaTarget.resolve(nombreArchivo);
+                Files.write(archivoTarget, bytes);
+
+                // RUTA 2 → src
+                String dirSrc = System.getProperty("user.dir") + "/cristabel-viaje/src/main/resources/static/img/";
+                Path rutaSrc = Paths.get(dirSrc);
+                Files.createDirectories(rutaSrc);
+                Path archivoSrc = rutaSrc.resolve(nombreArchivo);
+                Files.write(archivoSrc, bytes);
+
+                producto.setImagen(nombreArchivo);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error al subir la imagen: " + e.getMessage());
+            }
+        }
 
         productoRepository.save(producto);
         return "redirect:/admin/productos";
@@ -70,5 +127,33 @@ public class AdminController {
             productoRepository.deleteById(id);
         }
         return "redirect:/admin/productos";
+    }
+
+    // PEDIDOS ADMIN
+
+    // Listar pedidos
+    @GetMapping("/pedidos")
+    public String listarPedidos(HttpSession session, Model model) {
+        String rol = (String) session.getAttribute("usuario_rol");
+        if (rol == null || !rol.equalsIgnoreCase("admin")) return "redirect:/";
+
+        model.addAttribute("pedidos", pedidoRepository.findAll());
+        return "admin/pedidos";
+    }
+
+    // Actualizar estado
+    @PostMapping("/pedidos/estado")
+    public String actualizarEstado(@RequestParam Long id, @RequestParam String estado, HttpSession session) {
+        String rol = (String) session.getAttribute("usuario_rol");
+        if (rol == null || !rol.equalsIgnoreCase("admin")) return "redirect:/";
+
+        Pedido pedido = pedidoRepository.findById(id).orElse(null);
+
+        if (pedido != null) {
+            pedido.setEstado(estado);
+            pedidoRepository.save(pedido);
+        }
+
+        return "redirect:/admin/pedidos";
     }
 }

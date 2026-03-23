@@ -17,7 +17,11 @@ public class DetallePedido implements Serializable {
 
     private Integer cantidad;
 
-    private Double precio; // Precio unitario en el momento de la compra
+    private Double precio;
+
+    private String talla;
+
+    private String color;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")

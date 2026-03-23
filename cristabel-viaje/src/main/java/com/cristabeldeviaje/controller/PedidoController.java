@@ -43,7 +43,7 @@ public class PedidoController {
             return "redirect:/login";
         }
 
-        Map<Producto, Integer> carrito = carritoService.getProductos();
+        var carrito = carritoService.getItems();
 
         if (carrito == null || carrito.isEmpty()) {
             return "redirect:/carrito";
@@ -63,9 +63,9 @@ public class PedidoController {
         double totalPedido = 0;
         List<DetallePedido> detalles = new ArrayList<>();
 
-        for (Map.Entry<Producto, Integer> entry : carrito.entrySet()) {
-            Producto producto = entry.getKey();
-            Integer cantidad = entry.getValue();
+        for (var item : carrito) {
+            Producto producto = item.getProducto();
+            Integer cantidad = item.getCantidad();
 
             Integer stockActual = producto.getStock();
 
@@ -85,6 +85,8 @@ public class PedidoController {
             detalle.setProducto(producto);
             detalle.setCantidad(cantidad);
             detalle.setPrecio(producto.getPrecio());
+            detalle.setTalla(item.getTalla());
+            detalle.setColor(item.getColor());
 
             detalles.add(detalle);
             totalPedido += producto.getPrecio() * cantidad;

@@ -88,7 +88,162 @@
         </div>
     </div>
 
-    <!-- 🔥 PRODUCTOS RELACIONADOS -->
+    <!-- BLOQUE VALORACIONES -->
+    <div style="margin-top: 50px;">
+        <h3 style="margin-bottom: 20px;">Deja tu valoración</h3>
+
+        <div th:if="${param.valoracionOk}"
+             style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Tu valoración se ha guardado correctamente.
+        </div>
+
+        <div th:if="${param.adminNoCompra}"
+             style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            La cuenta de administrador no puede realizar compras.
+        </div>
+
+        <div th:if="${param.valoracionDuplicada}"
+             style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Ya has valorado este producto.
+        </div>
+
+        <div th:if="${param.valoracionNoPermitida}"
+             style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Solo puedes valorar productos que hayas comprado y recibido.
+        </div>
+
+        <div th:if="${param.errorOpciones}"
+             style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Debes seleccionar las variables del producto antes de añadirlo al carrito.
+        </div>
+
+        <div th:if="${puedeValorar}">
+            <form th:action="@{/producto/{id}/valorar(id=${producto.id})}" method="post"
+                  style="background: white; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+
+                <div style="margin-bottom: 15px;">
+                    <label for="puntuacion" style="display: block; margin-bottom: 6px; font-weight: 600;">Puntuación</label>
+                    <select name="puntuacion" id="puntuacion" required style="width: 100%; max-width: 200px;">
+                        <option value="">Selecciona</option>
+                        <option value="5">5 - Excelente</option>
+                        <option value="4">4 - Muy buena</option>
+                        <option value="3">3 - Buena</option>
+                        <option value="2">2 - Regular</option>
+                        <option value="1">1 - Mala</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="comentario" style="display: block; margin-bottom: 6px; font-weight: 600;">Comentario</label>
+                    <textarea name="comentario" id="comentario" rows="4" required style="width: 100%;"></textarea>
+                </div>
+
+                <button type="submit" class="btn-admin">Enviar valoración</button>
+            </form>
+        </div>
+
+        <div th:if="${session.usuario_email == null}"
+             style="margin-bottom: 30px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+            <p style="margin: 0;">
+                Debes <a th:href="@{/login}">iniciar sesión</a> para dejar una valoración.
+            </p>
+        </div>
+
+        <div th:if="${session.usuario_email != null and !puedeValorar and !yaValoro}"
+             style="margin-bottom: 30px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+            <p style="margin: 0;">
+                Solo puedes valorar productos que hayas comprado y recibido.
+            </p>
+        </div>
+
+        <div th:if="${yaValoro and miValoracion != null}"
+             style="margin-bottom: 30px; background: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">
+            <h4 style="margin-bottom: 15px;">Tu valoración</h4>
+
+            <form th:action="@{/producto/{productoId}/valoracion/{valoracionId}/editar(productoId=${producto.id}, valoracionId=${miValoracion.id})}"
+                  method="post"
+                  style="margin-bottom: 15px;">
+
+                <div style="margin-bottom: 15px;">
+                    <label for="editarPuntuacion" style="display: block; margin-bottom: 6px; font-weight: 600;">Puntuación</label>
+                    <select name="puntuacion" id="editarPuntuacion" required style="width: 100%; max-width: 200px;">
+                        <option value="5" th:selected="${miValoracion.puntuacion == 5}">5 - Excelente</option>
+                        <option value="4" th:selected="${miValoracion.puntuacion == 4}">4 - Muy buena</option>
+                        <option value="3" th:selected="${miValoracion.puntuacion == 3}">3 - Buena</option>
+                        <option value="2" th:selected="${miValoracion.puntuacion == 2}">2 - Regular</option>
+                        <option value="1" th:selected="${miValoracion.puntuacion == 1}">1 - Mala</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="editarComentario" style="display: block; margin-bottom: 6px; font-weight: 600;">Comentario</label>
+                    <textarea name="comentario" id="editarComentario" rows="4" required style="width: 100%;"
+                              th:text="${miValoracion.comentario}"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button type="submit" class="btn-admin">Guardar cambios</button>
+                </div>
+            </form>
+
+            <form th:action="@{/producto/{productoId}/valoracion/{valoracionId}/eliminar(productoId=${producto.id}, valoracionId=${miValoracion.id})}"
+                  method="post"
+                  onsubmit="return confirm('¿Seguro que quieres eliminar tu valoración?');">
+                <button type="submit" class="btn-outline-secondary">Eliminar valoración</button>
+            </form>
+        </div>
+
+        <div th:if="${param.valoracionEditada}"
+             style="background-color: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Tu valoración se ha actualizado correctamente.
+        </div>
+
+        <div th:if="${param.valoracionEliminada}"
+             style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            Tu valoración se ha eliminado correctamente.
+        </div>
+    </div>
+
+    <!-- LISTADO DE VALORACIONES -->
+    <div style="margin-top: 40px;">
+        <h3 style="margin-bottom: 20px;">Valoraciones de clientes</h3>
+
+        <div th:if="${#lists.isEmpty(valoraciones)}">
+            <p>Aún no hay valoraciones para este producto.</p>
+        </div>
+
+        <div th:each="valoracion : ${valoraciones}"
+             style="background: white; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+
+            <p style="margin-bottom: 8px; font-weight: 600;" th:text="${valoracion.usuario.nombre}">Usuario</p>
+
+            <div style="font-size: 1.2rem; color: #FFC107; margin-bottom: 10px;">
+                <span th:text="${valoracion.puntuacion >= 1 ? '★' : '☆'}"></span>
+                <span th:text="${valoracion.puntuacion >= 2 ? '★' : '☆'}"></span>
+                <span th:text="${valoracion.puntuacion >= 3 ? '★' : '☆'}"></span>
+                <span th:text="${valoracion.puntuacion >= 4 ? '★' : '☆'}"></span>
+                <span th:text="${valoracion.puntuacion >= 5 ? '★' : '☆'}"></span>
+            </div>
+
+            <p th:text="${valoracion.comentario}">Comentario</p>
+
+            <div th:if="${valoracion.respuestaAdmin != null and !#strings.isEmpty(valoracion.respuestaAdmin)}"
+                 style="margin-top: 15px; background: #f8f9fa; border-left: 4px solid #2E7D32; padding: 15px; border-radius: 6px;">
+                <p style="margin-bottom: 8px;"><strong>Respuesta del administrador:</strong></p>
+                <p th:text="${valoracion.respuestaAdmin}"></p>
+                <small style="color: #777;"
+                       th:text="${valoracion.fechaRespuesta != null ? #temporals.format(valoracion.fechaRespuesta, 'dd/MM/yyyy HH:mm') : ''}">
+                </small>
+            </div>
+
+            <small style="color: #777;"
+                   th:text="${#temporals.format(valoracion.fecha, 'dd/MM/yyyy HH:mm')}">
+                Fecha
+            </small>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
     <div th:if="${not #lists.isEmpty(relacionados)}" style="margin-top: 60px;">
         <h3 style="margin-bottom: 25px; color: #2E7D32;">
             Productos de la misma categoría
@@ -105,13 +260,11 @@
                          th:alt="${p.nombre}">
 
                     <div class="card-body">
-
                         <h5 th:text="${p.nombre}"
                             style="font-size: 1.1rem; margin-bottom: 10px;"></h5>
 
                         <p class="text-primary"
                            th:text="${#numbers.formatDecimal(p.precio, 1, 2) + ' €'}"></p>
-
                     </div>
                 </a>
 

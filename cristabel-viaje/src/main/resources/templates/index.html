@@ -9,137 +9,136 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- BANNER PRINCIPAL -->
-<section style="position: relative; width: 100%; height: 100vh; overflow: hidden; margin-bottom: 50px;">
-  <img th:src="@{/img/banner-home.jpg}"
-       alt="Banner principal"
-       style="width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block;">
+<section class="home-banner">
+  <img th:src="@{/img/banner-home.jpg}" alt="Banner principal" class="home-banner-img">
 
-  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.18); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-    <h1 style="color: white; font-size: 3rem; margin-bottom: 20px; text-shadow: 0 3px 12px rgba(0,0,0,0.35);">
-      Bienvenido a Cristabel de Viaje
-    </h1>
+  <div class="home-banner-overlay">
+    <h1>Bienvenido a Cristabel de Viaje</h1>
 
-    <p style="color: white; font-size: 1.2rem; max-width: 760px; margin-bottom: 25px; line-height: 1.7; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+    <p>
       Material de senderismo seleccionado para ayudarte a equiparte mejor, disfrutar más de cada ruta
       y descubrir productos pensados para diferentes niveles y necesidades.
     </p>
 
     <a href="https://www.instagram.com/" target="_blank" class="btn-admin">
-      Síguenos en redes
+      ¡Síguenos en redes!
     </a>
   </div>
 </section>
 
 <div id="tienda" class="container mt-4">
 
-  <div class="caja-blanca sombra-suave" style="margin-bottom: 40px; text-align: center;">
-    <h2 style="margin-bottom: 15px;">¿Qué es esta tienda?</h2>
-    <p style="max-width: 850px; margin: 0 auto; color: #555; line-height: 1.8;">
+  <section class="caja-blanca sombra-suave home-intro">
+    <h2>¿Qué es esta tienda?</h2>
+    <p>
       Cristabel de Viaje es una tienda online centrada en material técnico de senderismo.
       Aquí encontrarás productos seleccionados para diferentes perfiles de usuario, desde personas que se inician en la montaña
       hasta quienes buscan una equipación más completa. Además, la tienda incorpora packs recomendados para ahorrar tiempo en la elección
       y dinero al comprar varios productos juntos.
     </p>
-  </div>
+  </section>
 
-  <h2 class="text-center mb-4">Nuestros Productos</h2>
+  <section class="home-productos">
+    <h2 class="text-center mb-4">Nuestros Productos</h2>
 
-  <div class="row" th:if="${productos != null and !productos.isEmpty()}">
-    <div class="col-md-4 mb-4" th:each="producto : ${productos}">
-      <div class="card h-100 shadow-sm">
+    <div class="row" th:if="${productos != null and !productos.isEmpty()}">
+      <div class="col-md-4 mb-4" th:each="producto : ${productos}">
+        <div class="card h-100 shadow-sm">
 
-        <img th:if="${producto.imagen != null}"
-             th:src="@{'/img/' + ${producto.imagen}}"
-             class="card-img-top"
-             th:alt="${producto.nombre}">
+          <img th:if="${producto.imagen != null}"
+               th:src="@{'/img/' + ${producto.imagen}}"
+               class="card-img-top"
+               th:alt="${producto.nombre}">
 
-        <img th:if="${producto.imagen == null}"
-             src="https://via.placeholder.com/250"
-             class="card-img-top"
-             alt="Sin imagen">
+          <img th:if="${producto.imagen == null}"
+               src="https://via.placeholder.com/250"
+               class="card-img-top"
+               alt="Sin imagen">
 
-        <div class="card-body text-center">
-          <h5 class="card-title" th:text="${producto.nombre != null ? producto.nombre : 'Producto sin nombre'}">Nombre</h5>
+          <div class="card-body text-center">
+            <h5 class="card-title"
+                th:text="${producto.nombre != null ? producto.nombre : 'Producto sin nombre'}">
+              Nombre
+            </h5>
 
-          <div th:if="${medias[producto.id] > 0}"
-               style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px;">
+            <div th:if="${medias[producto.id] > 0}" class="home-rating">
+              <div class="home-rating-stars">
+                <span th:text="${medias[producto.id] >= 1 ? '★' : '☆'}"></span>
+                <span th:text="${medias[producto.id] >= 2 ? '★' : '☆'}"></span>
+                <span th:text="${medias[producto.id] >= 3 ? '★' : '☆'}"></span>
+                <span th:text="${medias[producto.id] >= 4 ? '★' : '☆'}"></span>
+                <span th:text="${medias[producto.id] >= 5 ? '★' : '☆'}"></span>
+              </div>
 
-            <div style="color: #FFC107;">
-              <span th:text="${medias[producto.id] >= 1 ? '★' : '☆'}"></span>
-              <span th:text="${medias[producto.id] >= 2 ? '★' : '☆'}"></span>
-              <span th:text="${medias[producto.id] >= 3 ? '★' : '☆'}"></span>
-              <span th:text="${medias[producto.id] >= 4 ? '★' : '☆'}"></span>
-              <span th:text="${medias[producto.id] >= 5 ? '★' : '☆'}"></span>
+              <small class="home-rating-number">
+                (<span th:text="${#numbers.formatDecimal(medias[producto.id], 1, 1)}">0.0</span>)
+              </small>
             </div>
 
-            <small style="color: #666;">
-              (<span th:text="${#numbers.formatDecimal(medias[producto.id], 1, 1)}">0.0</span>)
-            </small>
-          </div>
+            <p class="fw-bold text-primary"
+               th:text="${producto.precio != null ? producto.precio + ' €' : '0.00 €'}"></p>
 
-          <p class="fw-bold text-primary" th:text="${producto.precio != null ? producto.precio + ' €' : '0.00 €'}"></p>
+            <div class="d-grid gap-2">
 
-          <div class="d-grid gap-2">
+              <a th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
+                 th:href="@{'/producto/' + ${producto.id}}"
+                 class="btn btn-outline-secondary">
+                Ver detalles
+              </a>
 
-            <a th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
-               th:href="@{'/producto/' + ${producto.id}}"
-               class="btn btn-outline-secondary">
-              Ver detalles
-            </a>
+              <form th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
+                    th:action="@{/carrito/add}" method="post" class="home-add-form">
+                <input type="hidden" name="id" th:value="${producto.id}">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                  🛒 Añadir al carrito
+                </button>
+              </form>
 
-            <form th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
-                  th:action="@{/carrito/add}" method="post" style="margin: 0;">
-              <input type="hidden" name="id" th:value="${producto.id}">
-              <button type="submit" class="btn btn-primary btn-lg w-100">
-                🛒 Añadir al carrito
-              </button>
-            </form>
+              <a th:if="${(producto.tallas != null and !#strings.isEmpty(producto.tallas)) or (producto.colores != null and !#strings.isEmpty(producto.colores))}"
+                 th:href="@{'/producto/' + ${producto.id}}"
+                 class="btn btn-primary btn-lg w-100">
+                Ver producto
+              </a>
 
-            <a th:if="${(producto.tallas != null and !#strings.isEmpty(producto.tallas)) or (producto.colores != null and !#strings.isEmpty(producto.colores))}"
-               th:href="@{'/producto/' + ${producto.id}}"
-               class="btn btn-primary btn-lg w-100">
-              Ver producto
-            </a>
-
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div th:if="${productos == null or productos.isEmpty()}" class="alert alert-info text-center">
-    No hay productos disponibles actualmente.
-  </div>
+    <div th:if="${productos == null or productos.isEmpty()}" class="alert alert-info text-center">
+      No hay productos disponibles actualmente.
+    </div>
+  </section>
 
-  <section style="margin-top: 60px; margin-bottom: 40px;">
+  <section class="home-packs">
     <h2 class="text-center mb-4">Nuestros Packs</h2>
 
-    <div style="max-width: 850px; margin: 0 auto 30px auto; text-align: center; color: #555; line-height: 1.8;">
+    <div class="home-packs-texto">
       Hemos preparado packs pensados para ayudarte a elegir mejor según tu nivel y necesidades.
       Con ellos puedes ahorrar tiempo en la elección y beneficiarte de un mejor precio al comprar productos combinados.
     </div>
 
-    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+    <div class="home-packs-grid">
 
-      <div class="card" style="width: 320px;">
+      <div class="card home-pack-card">
         <img th:src="@{/img/pack-cristabel.jpg}" class="card-img-top" alt="Pack Cristabel de Viaje">
 
         <div class="card-body text-center">
-          <h3 style="margin-bottom: 15px;">Pack Cristabel de Viaje</h3>
-          <p style="color: #666; min-height: 72px;">
+          <h3>Pack Cristabel de Viaje</h3>
+          <p>
             Una selección más completa, pensada para quienes buscan una equipación cuidada y funcional.
           </p>
           <a th:href="@{/pack/cristabel}" class="btn-admin">Ver pack</a>
         </div>
       </div>
 
-      <div class="card" style="width: 320px;">
+      <div class="card home-pack-card">
         <img th:src="@{/img/pack-principiantes.jpg}" class="card-img-top" alt="Pack Principiantes">
 
         <div class="card-body text-center">
-          <h3 style="margin-bottom: 15px;">Pack Principiantes</h3>
-          <p style="color: #666; min-height: 72px;">
+          <h3>Pack Principiantes</h3>
+          <p>
             Ideal para quienes empiezan en el senderismo y quieren una base útil sin complicarse.
           </p>
           <a th:href="@{/pack/principiantes}" class="btn-admin">Ver pack</a>
@@ -149,10 +148,9 @@
     </div>
   </section>
 
-  <!-- BLOQUE CONTACTO -->
-  <section class="caja-blanca sombra-suave" style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
-    <h2 style="margin-bottom: 15px;">¿Tienes alguna duda?</h2>
-    <p style="max-width: 750px; margin: 0 auto 20px auto; color: #555; line-height: 1.8;">
+  <section class="caja-blanca sombra-suave home-contacto">
+    <h2>¿Tienes alguna duda?</h2>
+    <p>
       Si necesitas más información sobre productos, packs o pedidos, puedes ponerte en contacto con nosotros
       a través del formulario de contacto.
     </p>

@@ -24,6 +24,17 @@
   </div>
 
   <div th:if="${items != null and !#lists.isEmpty(items)}">
+
+    <div th:if="${packPrincipiantesAplicado}"
+         style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+      Se ha aplicado el descuento del Pack Principiantes.
+    </div>
+
+    <div th:if="${packCristabelAplicado}"
+         style="background-color: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+      Se ha aplicado el descuento del Pack Cristabel de Viaje.
+    </div>
+
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: left;">
       <thead>
       <tr>
@@ -46,13 +57,13 @@
         <td th:text="${#numbers.formatDecimal(item.producto.precio, 1, 2) + ' €'}"></td>
 
         <td>
-          <div th:if="${item.talla != null}">
+          <div th:if="${item.talla != null and !#strings.isEmpty(item.talla)}">
             <strong>Talla:</strong> <span th:text="${item.talla}"></span>
           </div>
-          <div th:if="${item.color != null}">
+          <div th:if="${item.color != null and !#strings.isEmpty(item.color)}">
             <strong>Color:</strong> <span th:text="${item.color}"></span>
           </div>
-          <div th:if="${item.talla == null and item.color == null}">
+          <div th:if="${(item.talla == null or #strings.isEmpty(item.talla)) and (item.color == null or #strings.isEmpty(item.color))}">
             Sin opciones
           </div>
         </td>
@@ -79,9 +90,21 @@
     </table>
 
     <div style="text-align: right; margin-top: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px;">
-      <h2 style="margin: 0;">
-        Total:
+      <h2 style="margin: 0 0 10px 0;">
+        Total sin descuento:
         <span th:text="${#numbers.formatDecimal(total, 1, 2) + ' €'}"
+              style="color: #333;"></span>
+      </h2>
+
+      <div th:if="${descuento > 0}" style="margin-bottom: 10px; font-size: 1.1rem;">
+        Descuento packs:
+        <span th:text="'- ' + ${#numbers.formatDecimal(descuento, 1, 2)} + ' €'"
+              style="color: #2E7D32; font-weight: bold;"></span>
+      </div>
+
+      <h2 style="margin: 0;">
+        Total final:
+        <span th:text="${#numbers.formatDecimal(totalFinal, 1, 2) + ' €'}"
               style="color: #28a745;"></span>
       </h2>
 

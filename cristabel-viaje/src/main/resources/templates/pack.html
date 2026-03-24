@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${nombrePack}"></title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor">
+
+    <h1 th:text="${nombrePack}"></h1>
+
+    <div style="margin:20px 0;">
+        <span style="text-decoration: line-through; color:#999;">
+            <span th:text="${#numbers.formatDecimal(precioOriginal, 1, 2)}"></span> €
+        </span>
+
+        <span style="font-size:2rem; color:#2E7D32; font-weight:700; margin-left:10px;">
+            <span th:text="${#numbers.formatDecimal(precioPack, 1, 2)}"></span> €
+        </span>
+    </div>
+
+    <div style="margin-bottom:30px;">
+        <p>Este pack incluye los siguientes productos:</p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4" th:each="producto : ${productos}">
+            <div class="card mb-4">
+
+                <img th:src="@{'/img/' + ${producto.imagen}}" class="card-img-top" th:alt="${producto.nombre}">
+
+                <div class="card-body">
+                    <h5 th:text="${producto.nombre}"></h5>
+
+                    <p class="text-primary">
+                        <span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}"></span> €
+                    </p>
+
+                    <a th:href="@{'/producto/' + ${producto.id}}"
+                       class="boton-detalle">
+                        Ver producto
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:30px;">
+        <form th:action="@{/carrito/add-pack}" method="post">
+            <input type="hidden" name="pack" th:value="${codigoPack}">
+            <button type="submit" class="boton-carrito">
+                Añadir pack al carrito
+            </button>
+        </form>
+    </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

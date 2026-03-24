@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacto - Cristabel de Viaje</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor" style="max-width: 700px; margin: 40px auto;">
+
+    <div class="caja-blanca sombra-suave">
+        <h1 style="margin-bottom: 20px; text-align: center;">Contacto</h1>
+
+        <p style="text-align: center; color: #555; margin-bottom: 30px;">
+            Si tienes cualquier duda sobre productos, pedidos o packs, puedes escribirnos a través de este formulario.
+        </p>
+
+        <div th:if="${ok}"
+             style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <span th:text="${ok}"></span>
+        </div>
+
+        <form th:action="@{/contacto}" method="post">
+
+            <div style="margin-bottom: 15px;">
+                <label>Nombre:</label>
+                <input type="text" name="nombre" required style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label>Email:</label>
+                <input type="email" name="email" required style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Mensaje:</label>
+                <textarea name="mensaje" rows="6" required style="width: 100%;"></textarea>
+            </div>
+
+            <button type="submit" class="btn-admin" style="width: 100%;">
+                Enviar mensaje
+            </button>
+        </form>
+    </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

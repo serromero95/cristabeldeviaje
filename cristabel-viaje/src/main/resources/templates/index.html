@@ -3,15 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Cristabel de Viaje - Tienda</title>
-
   <th:block th:replace="~{fragments/head :: head}"></th:block>
-
 </head>
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<div class="container mt-4">
-  <h1 class="text-center mb-4">Nuestros Productos</h1>
+<!-- BANNER PRINCIPAL -->
+<section style="position: relative; width: 100%; height: 100vh; overflow: hidden; margin-bottom: 50px;">
+  <img th:src="@{/img/banner-home.jpg}"
+       alt="Banner principal"
+       style="width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block;">
+
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.18); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+    <h1 style="color: white; font-size: 3rem; margin-bottom: 20px; text-shadow: 0 3px 12px rgba(0,0,0,0.35);">
+      Bienvenido a Cristabel de Viaje
+    </h1>
+
+    <p style="color: white; font-size: 1.2rem; max-width: 760px; margin-bottom: 25px; line-height: 1.7; text-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+      Material de senderismo seleccionado para ayudarte a equiparte mejor, disfrutar más de cada ruta
+      y descubrir productos pensados para diferentes niveles y necesidades.
+    </p>
+
+    <a href="https://www.instagram.com/" target="_blank" class="btn-admin">
+      Síguenos en redes
+    </a>
+  </div>
+</section>
+
+<div id="tienda" class="container mt-4">
+
+  <div class="caja-blanca sombra-suave" style="margin-bottom: 40px; text-align: center;">
+    <h2 style="margin-bottom: 15px;">¿Qué es esta tienda?</h2>
+    <p style="max-width: 850px; margin: 0 auto; color: #555; line-height: 1.8;">
+      Cristabel de Viaje es una tienda online centrada en material técnico de senderismo.
+      Aquí encontrarás productos seleccionados para diferentes perfiles de usuario, desde personas que se inician en la montaña
+      hasta quienes buscan una equipación más completa. Además, la tienda incorpora packs recomendados para ahorrar tiempo en la elección
+      y dinero al comprar varios productos juntos.
+    </p>
+  </div>
+
+  <h2 class="text-center mb-4">Nuestros Productos</h2>
 
   <div class="row" th:if="${productos != null and !productos.isEmpty()}">
     <div class="col-md-4 mb-4" th:each="producto : ${productos}">
@@ -29,6 +61,7 @@
 
         <div class="card-body text-center">
           <h5 class="card-title" th:text="${producto.nombre != null ? producto.nombre : 'Producto sin nombre'}">Nombre</h5>
+
           <div th:if="${medias[producto.id] > 0}"
                style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px;">
 
@@ -43,13 +76,12 @@
             <small style="color: #666;">
               (<span th:text="${#numbers.formatDecimal(medias[producto.id], 1, 1)}">0.0</span>)
             </small>
-
           </div>
+
           <p class="fw-bold text-primary" th:text="${producto.precio != null ? producto.precio + ' €' : '0.00 €'}"></p>
 
           <div class="d-grid gap-2">
 
-            <!-- Producto SIN variantes -->
             <a th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
                th:href="@{'/producto/' + ${producto.id}}"
                class="btn btn-outline-secondary">
@@ -64,7 +96,6 @@
               </button>
             </form>
 
-            <!-- Producto CON variantes -->
             <a th:if="${(producto.tallas != null and !#strings.isEmpty(producto.tallas)) or (producto.colores != null and !#strings.isEmpty(producto.colores))}"
                th:href="@{'/producto/' + ${producto.id}}"
                class="btn btn-primary btn-lg w-100">
@@ -80,7 +111,56 @@
   <div th:if="${productos == null or productos.isEmpty()}" class="alert alert-info text-center">
     No hay productos disponibles actualmente.
   </div>
+
+  <section style="margin-top: 60px; margin-bottom: 40px;">
+    <h2 class="text-center mb-4">Nuestros Packs</h2>
+
+    <div style="max-width: 850px; margin: 0 auto 30px auto; text-align: center; color: #555; line-height: 1.8;">
+      Hemos preparado packs pensados para ayudarte a elegir mejor según tu nivel y necesidades.
+      Con ellos puedes ahorrar tiempo en la elección y beneficiarte de un mejor precio al comprar productos combinados.
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+
+      <div class="card" style="width: 320px;">
+        <img th:src="@{/img/pack-cristabel.jpg}" class="card-img-top" alt="Pack Cristabel de Viaje">
+
+        <div class="card-body text-center">
+          <h3 style="margin-bottom: 15px;">Pack Cristabel de Viaje</h3>
+          <p style="color: #666; min-height: 72px;">
+            Una selección más completa, pensada para quienes buscan una equipación cuidada y funcional.
+          </p>
+          <a th:href="@{/pack/cristabel}" class="btn-admin">Ver pack</a>
+        </div>
+      </div>
+
+      <div class="card" style="width: 320px;">
+        <img th:src="@{/img/pack-principiantes.jpg}" class="card-img-top" alt="Pack Principiantes">
+
+        <div class="card-body text-center">
+          <h3 style="margin-bottom: 15px;">Pack Principiantes</h3>
+          <p style="color: #666; min-height: 72px;">
+            Ideal para quienes empiezan en el senderismo y quieren una base útil sin complicarse.
+          </p>
+          <a th:href="@{/pack/principiantes}" class="btn-admin">Ver pack</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BLOQUE CONTACTO -->
+  <section class="caja-blanca sombra-suave" style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
+    <h2 style="margin-bottom: 15px;">¿Tienes alguna duda?</h2>
+    <p style="max-width: 750px; margin: 0 auto 20px auto; color: #555; line-height: 1.8;">
+      Si necesitas más información sobre productos, packs o pedidos, puedes ponerte en contacto con nosotros
+      a través del formulario de contacto.
+    </p>
+    <a th:href="@{/contacto}" class="btn-admin">Ir al formulario de contacto</a>
+  </section>
+
 </div>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

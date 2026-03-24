@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Packs - Cristabel de Viaje</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor" style="margin-top: 40px; margin-bottom: 50px;">
+
+    <section style="text-align: center; max-width: 850px; margin: 0 auto 40px auto;">
+        <h1 style="margin-bottom: 20px;">Nuestros packs de senderismo</h1>
+        <p style="font-size: 1.1rem; color: #555; line-height: 1.7;">
+            Hemos preparado packs pensados para ayudarte a elegir más rápido y comprar mejor.
+            Con ellos puedes conseguir una selección de productos ya combinados según tu perfil,
+            ahorrando tiempo en la elección y dinero al obtener un precio más competitivo.
+        </p>
+    </section>
+
+    <section style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+
+        <div class="card" style="width: 320px;">
+            <img th:src="@{/img/pack-cristabel.jpg}" class="card-img-top" alt="Pack Cristabel de Viaje">
+
+            <div class="card-body" style="text-align: center;">
+                <h3 style="margin-bottom: 15px;">Pack Cristabel de Viaje</h3>
+                <p style="color: #666; min-height: 72px;">
+                    Una selección pensada para quienes buscan una equipación más completa,
+                    inspirada en el estilo de recomendación de Cristabel de Viaje.
+                </p>
+
+                <a th:href="@{/pack/cristabel}" class="btn-admin">
+                    Ver pack
+                </a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 320px;">
+            <img th:src="@{/img/pack-principiantes.jpg}" class="card-img-top" alt="Pack para principiantes">
+
+            <div class="card-body" style="text-align: center;">
+                <h3 style="margin-bottom: 15px;">Pack para Principiantes</h3>
+                <p style="color: #666; min-height: 72px;">
+                    Ideal para quienes se inician en el senderismo y quieren una combinación
+                    básica, útil y equilibrada para empezar con buen pie.
+                </p>
+
+                <a th:href="@{/pack/principiantes}" class="btn-admin">
+                    Ver pack
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

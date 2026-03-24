@@ -29,35 +29,53 @@
                 <h2 class="precio-grande fw-bold" th:text="${#numbers.formatDecimal(producto.precio, 1, 2) + ' €'}">0.00 €</h2>
             </div>
 
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 1.4rem; color: #FFC107; margin-bottom: 5px;">
+                    <span th:text="${mediaValoracion >= 1 ? '★' : '☆'}"></span>
+                    <span th:text="${mediaValoracion >= 2 ? '★' : '☆'}"></span>
+                    <span th:text="${mediaValoracion >= 3 ? '★' : '☆'}"></span>
+                    <span th:text="${mediaValoracion >= 4 ? '★' : '☆'}"></span>
+                    <span th:text="${mediaValoracion >= 5 ? '★' : '☆'}"></span>
+                </div>
+                <p style="margin: 0; color: #666;">
+                    <strong th:text="${#numbers.formatDecimal(mediaValoracion, 1, 1)}">0.0</strong>
+                    <span th:text="'(' + ${totalValoraciones} + ' valoraciones)'"></span>
+                </p>
+            </div>
+
             <div class="d-grid gap-3">
-                <form th:action="@{/carrito/add}" method="post">
+
+                <div th:if="${session.usuario_rol == 'admin'}"
+                     style="background: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 15px;">
+                    La cuenta de administrador no puede realizar compras.
+                </div>
+
+                <form th:if="${session.usuario_rol != 'admin'}" th:action="@{/carrito/add}" method="post">
                     <input type="hidden" name="id" th:value="${producto.id}">
 
                     <div th:if="${producto.tallas != null and !#strings.isEmpty(producto.tallas)}" style="margin-bottom: 15px;">
-                        <label for="talla" style="display: block; margin-bottom: 6px; font-weight: 600;">Talla</label>
-                        <select name="talla" id="talla" style="width: 100%;">
+                        <label>Talla</label>
+                        <select name="talla" required style="width: 100%;">
                             <option value="">Selecciona una talla</option>
                             <option th:each="talla : ${#strings.arraySplit(producto.tallas, ',')}"
                                     th:value="${#strings.trim(talla)}"
-                                    th:text="${#strings.trim(talla)}">
-                            </option>
+                                    th:text="${#strings.trim(talla)}"></option>
                         </select>
                     </div>
 
                     <div th:if="${producto.colores != null and !#strings.isEmpty(producto.colores)}" style="margin-bottom: 15px;">
-                        <label for="color" style="display: block; margin-bottom: 6px; font-weight: 600;">Color</label>
-                        <select name="color" id="color" style="width: 100%;">
+                        <label>Color</label>
+                        <select name="color" required style="width: 100%;">
                             <option value="">Selecciona un color</option>
                             <option th:each="color : ${#strings.arraySplit(producto.colores, ',')}"
                                     th:value="${#strings.trim(color)}"
-                                    th:text="${#strings.trim(color)}">
-                            </option>
+                                    th:text="${#strings.trim(color)}"></option>
                         </select>
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <label for="cantidad" style="display: block; margin-bottom: 6px; font-weight: 600;">Cantidad</label>
-                        <input type="number" id="cantidad" name="cantidad" min="1" value="1" style="width: 100px;">
+                        <label>Cantidad</label>
+                        <input type="number" name="cantidad" min="1" value="1" style="width: 100px;">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg px-5 w-100">
@@ -69,6 +87,39 @@
             </div>
         </div>
     </div>
+
+    <!-- 🔥 PRODUCTOS RELACIONADOS -->
+    <div th:if="${not #lists.isEmpty(relacionados)}" style="margin-top: 60px;">
+        <h3 style="margin-bottom: 25px; color: #2E7D32;">
+            Productos de la misma categoría
+        </h3>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+
+            <div th:each="p : ${relacionados}" class="card" style="width: 220px;">
+
+                <a th:href="@{/producto/{id}(id=${p.id})}" style="color: inherit;">
+
+                    <img th:src="@{'/img/' + ${p.imagen}}"
+                         class="card-img-top"
+                         th:alt="${p.nombre}">
+
+                    <div class="card-body">
+
+                        <h5 th:text="${p.nombre}"
+                            style="font-size: 1.1rem; margin-bottom: 10px;"></h5>
+
+                        <p class="text-primary"
+                           th:text="${#numbers.formatDecimal(p.precio, 1, 2) + ' €'}"></p>
+
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

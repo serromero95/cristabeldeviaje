@@ -22,7 +22,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute Usuario usuario, Model model) {
+    public String registerUser(@ModelAttribute Usuario usuario,
+                               @RequestParam String confirmPassword,
+                               Model model) {
+
         Usuario existente = usuarioRepository.findByEmail(usuario.getEmail());
 
         if (existente != null) {
@@ -30,8 +33,14 @@ public class AuthController {
             return "register";
         }
 
+        if (!usuario.getPassword().equals(confirmPassword)) {
+            model.addAttribute("error", "Las contraseñas no coinciden");
+            return "register";
+        }
+
         usuario.setRol("cliente");
         usuarioRepository.save(usuario);
+
         return "redirect:/login?success";
     }
 
@@ -50,11 +59,15 @@ public class AuthController {
         Usuario user = usuarioRepository.findByEmail(email);
 
         if (user != null && password.equals(user.getPassword())) {
-            // Guardamos datos clave en la sesión
             session.setAttribute("usuario_id", user.getId());
             session.setAttribute("usuario_nombre", user.getNombre());
             session.setAttribute("usuario_rol", user.getRol());
             session.setAttribute("usuario_email", user.getEmail());
+
+            if ("admin".equalsIgnoreCase(user.getRol())) {
+                return "redirect:/admin";
+            }
+
             return "redirect:/";
         }
 
@@ -65,7 +78,7 @@ public class AuthController {
     // --- LOGOUT ---
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // Limpia toda la sesión
+        session.invalidate();
         return "redirect:/";
     }
 }

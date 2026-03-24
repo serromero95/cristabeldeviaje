@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Categorías</title>
+  <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor">
+  <h1>Gestión de Categorías</h1>
+
+  <div th:if="${param.eliminado}"
+       style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    Categoría eliminada correctamente.
+  </div>
+
+  <div th:if="${param.errorCategoria}"
+       style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    No puedes eliminar una categoría que tiene productos asociados.
+  </div>
+
+  <p style="margin: 20px 0;">
+    <a th:href="@{/admin/categorias/nuevo}" class="btn-admin">
+      + Nueva categoría
+    </a>
+  </p>
+
+  <div class="caja-blanca sombra-suave" style="margin-top: 20px;">
+    <div th:if="${#lists.isEmpty(categorias)}">
+      <p>No hay categorías registradas.</p>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(categorias)}">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Productos</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="c : ${categorias}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.nombre}"></td>
+        <td th:text="${conteo[c.id]}"></td>
+        <td>
+          <a th:href="@{/admin/categorias/edit/{id}(id=${c.id})}"
+             style="margin-right: 12px; color: #2196F3; font-weight: 600;">
+            Editar
+          </a>
+
+          <a th:href="@{/admin/categorias/delete/{id}(id=${c.id})}"
+             onclick="return confirm('¿Seguro que quieres eliminar esta categoría?')"
+             style="color: #e53935; font-weight: 600;">
+            Eliminar
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top: 20px;">
+    <a href="/admin" class="volver">← Volver al panel</a>
+  </p>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

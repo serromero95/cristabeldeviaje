@@ -1,4 +1,11 @@
 <footer th:fragment="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666;font-size:14px;">
   <hr>
+  <div style="margin-top: 20px; text-align: center; font-size: 0.9rem;">
+    <a th:href="@{/aviso-legal}">Aviso legal</a> |
+    <a th:href="@{/privacidad}">Privacidad</a> |
+    <a th:href="@{/cookies}">Cookies</a> |
+    <a th:href="@{/condiciones}">Condiciones</a> |
+    <a th:href="@{/devoluciones}">Devoluciones</a>
+  </div>
   © <span th:text="${#dates.format(#dates.createNow(),'yyyy')}"></span> Cristabel de Viaje. Todos los derechos reservados.
 </footer>

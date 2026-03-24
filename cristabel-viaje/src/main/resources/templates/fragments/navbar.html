@@ -5,37 +5,78 @@
 <body>
 
 <header th:fragment="navbar" class="topbar">
-  <div class="contenedor-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #333; color: white;">
+    <div class="contenedor-header"
+         style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #333; color: white; flex-wrap: wrap; gap: 10px;">
 
-    <div class="logo-centro">
-      <a th:href="@{/}" style="color: white; text-decoration: none; display: flex; align-items: center;">
-        <img th:src="@{/img/logo.png}" alt="Logo" style="height: 40px; margin-right: 10px;">
-        <span style="font-weight: bold; font-size: 1.2rem;">Tienda de Senderismo</span>
-      </a>
-    </div>
+        <!-- LOGO -->
+        <div class="logo-centro">
+            <a th:href="@{/}" style="color: white; text-decoration: none; display: flex; align-items: center;">
+                <img th:src="@{/img/logo.png}" alt="Logo" style="height: 40px; margin-right: 10px;">
+                <span style="font-weight: bold; font-size: 1.2rem;">Tienda de Senderismo</span>
+            </a>
+        </div>
 
-    <nav class="enlaces-superiores">
-      <a th:href="@{/carrito}" style="color: #5bc0de; margin-right: 15px; text-decoration: none; font-weight: bold;">
-        🛒 Carrito <span th:if="${session.carrito != null}" th:text="'(' + ${session.carrito.size()} + ')'"></span>
-      </a> |
+        <!-- NAV -->
+        <nav class="enlaces-superiores"
+             style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
 
-      <span th:if="${session.usuario_nombre == null}">
-            <a th:href="@{/login}" style="color: white; margin-left: 15px;">Iniciar sesión</a> |
-            <a th:href="@{/register}" style="color: white; margin-left: 5px;">Registrarse</a>
-      </span>
+            <!-- NO LOGUEADO -->
+            <span th:if="${session.usuario_nombre == null}"
+                  style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
 
-      <span th:if="${session.usuario_nombre != null}">
-            Hola, <strong th:text="${session.usuario_nombre}">Usuario</strong> |
-            <a th:href="@{/mis-pedidos}" style="color: white; margin-left: 10px;">Mis pedidos</a> |
+                <a th:href="@{/carrito}"
+                   style="color: #5bc0de; text-decoration: none; font-weight: bold;">
+                    🛒 Carrito
+                </a> |
 
-            <span th:if="${session.usuario_rol == 'admin'}">
-                <a th:href="@{/admin/productos}" style="color: #ffc107; margin-left: 10px; font-weight: bold;">Panel Admin</a> |
+                <a th:href="@{/login}" style="color: white;">Iniciar sesión</a> |
+
+                <a th:href="@{/register}" style="color: white;">Registrarse</a>
             </span>
 
-            <a th:href="@{/logout}" style="color: #ff6b6b; margin-left: 10px;">Cerrar sesión</a>
-      </span>
-    </nav>
-  </div>
+            <!-- USUARIO -->
+            <span th:if="${session.usuario_nombre != null and session.usuario_rol != 'admin'}"
+                  style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+
+                <a th:href="@{/carrito}"
+                   style="color: #5bc0de; font-weight: bold;">
+                    🛒 Carrito
+                </a> |
+
+                <span>
+                    Hola, <strong th:text="${session.usuario_nombre}">Usuario</strong>
+                </span> |
+
+                <a th:href="@{/perfil}" style="color: white;">Mi perfil</a> |
+
+                <a th:href="@{/mis-pedidos}" style="color: white;">Mis pedidos</a> |
+
+                <a th:href="@{/logout}" style="color: #ff6b6b;">Cerrar sesión</a>
+            </span>
+
+            <!-- ADMIN -->
+            <span th:if="${session.usuario_nombre != null and session.usuario_rol == 'admin'}"
+                  style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+
+                <span>
+                    Hola, <strong th:text="${session.usuario_nombre}">Admin</strong>
+                </span> |
+
+                <a th:href="@{/admin}" style="color: #ffc107; font-weight: bold;">Panel</a> |
+
+                <a th:href="@{/admin/productos}" style="color: #ffc107; font-weight: bold;">Productos</a> |
+
+                <a th:href="@{/admin/categorias}" style="color: #ffc107; font-weight: bold;">Categorías</a> |
+
+                <a th:href="@{/admin/pedidos}" style="color: #ffc107; font-weight: bold;">Pedidos</a> |
+
+                <a th:href="@{/admin/valoraciones}" style="color: #ffc107; font-weight: bold;">Valoraciones</a> |
+
+                <a th:href="@{/logout}" style="color: #ff6b6b;">Cerrar sesión</a>
+            </span>
+
+        </nav>
+    </div>
 </header>
 
 </body>

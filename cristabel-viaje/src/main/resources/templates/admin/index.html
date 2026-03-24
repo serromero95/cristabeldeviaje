@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor" style="margin-top: 30px;">
+
+    <h1 style="text-align: center; margin-bottom: 40px;">
+        Panel de Administración
+    </h1>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+
+        <!-- PRODUCTOS -->
+        <a th:href="@{/admin/productos}" style="text-decoration: none;">
+            <div style="background: white; border-radius: 10px; padding: 30px; text-align: center; border: 1px solid #ddd;">
+                <h2>Productos</h2>
+                <p th:text="'Total: ' + ${totalProductos}"></p>
+            </div>
+        </a>
+
+        <!-- PEDIDOS -->
+        <a th:href="@{/admin/pedidos}" style="text-decoration: none;">
+            <div style="background: white; border-radius: 10px; padding: 30px; text-align: center; border: 1px solid #ddd;">
+                <h2>Pedidos</h2>
+                <p th:text="'Total: ' + ${totalPedidos}"></p>
+            </div>
+        </a>
+
+        <!-- VALORACIONES -->
+        <a th:href="@{/admin/valoraciones}" style="text-decoration: none;">
+            <div style="background: white; border-radius: 10px; padding: 30px; text-align: center; border: 1px solid #ddd;">
+                <h2>Valoraciones</h2>
+                <p th:text="'Total: ' + ${totalValoraciones}"></p>
+            </div>
+        </a>
+
+    </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi perfil</title>
+    <th:block th:replace="~{fragments/head :: head}"></th:block>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="contenedor" style="max-width:600px; margin:auto;">
+
+    <h2>Mi perfil</h2>
+
+    <div th:if="${param.ok}"
+         style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:15px;">
+        Datos actualizados correctamente
+    </div>
+
+    <form th:action="@{/perfil/update}" th:object="${usuario}" method="post">
+
+        <div style="margin-bottom:15px;">
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombre}" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Apellidos</label>
+            <input type="text" th:field="*{apellidos}" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Dirección</label>
+            <input type="text" th:field="*{direccion}" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Teléfono</label>
+            <input type="number" th:field="*{telefono}" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Comunidad Autónoma</label>
+            <select th:field="*{comunidad}" required style="width:100%;">
+                <option value="">Selecciona</option>
+                <option value="Galicia">Galicia</option>
+                <option value="Asturias">Asturias</option>
+                <option value="Cantabria">Cantabria</option>
+                <option value="País Vasco">País Vasco</option>
+                <option value="Navarra">Navarra</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Aragón">Aragón</option>
+                <option value="Cataluña">Cataluña</option>
+                <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+                <option value="Murcia">Murcia</option>
+                <option value="Andalucía">Andalucía</option>
+                <option value="Castilla-La Mancha">Castilla-La Mancha</option>
+                <option value="Madrid">Madrid</option>
+                <option value="Castilla y León">Castilla y León</option>
+                <option value="Extremadura">Extremadura</option>
+                <option value="Baleares">Baleares</option>
+                <option value="Canarias">Canarias</option>
+                <option value="Ceuta">Ceuta</option>
+                <option value="Melilla">Melilla</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>País</label>
+            <input type="text" th:field="*{pais}" required style="width:100%;">
+        </div>
+
+        <button class="btn-admin" style="width:100%;">Guardar cambios</button>
+
+    </form>
+
+    <hr style="margin:40px 0;">
+
+    <h3>Cambiar contraseña</h3>
+
+    <div th:if="${param.passOk}"
+         style="background:#d4edda; color:#155724; padding:10px; border-radius:5px; margin-bottom:15px;">
+        Contraseña actualizada correctamente
+    </div>
+
+    <div th:if="${param.passError}"
+         style="background:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px;">
+        Error al cambiar la contraseña
+    </div>
+
+    <form th:action="@{/perfil/password}" method="post">
+
+        <div style="margin-bottom:15px;">
+            <label>Contraseña actual</label>
+            <input type="password" name="actual" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Nueva contraseña</label>
+            <input type="password" name="nueva" required style="width:100%;">
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <label>Repetir nueva contraseña</label>
+            <input type="password" name="confirm" required style="width:100%;">
+        </div>
+
+        <button class="btn-admin" style="width:100%;">Cambiar contraseña</button>
+
+    </form>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

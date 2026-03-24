@@ -16,11 +16,18 @@ public class Usuario implements Serializable {
     private Long id;
 
     private String nombre;
+    private String apellidos;
 
     @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
 
-    private String rol = "cliente"; // Por defecto 'cliente', puede ser 'admin'
+    private String direccion;
+    private String comunidad;
+    private String pais;
+
+    private String telefono;
+
+    private String rol = "cliente";
 }

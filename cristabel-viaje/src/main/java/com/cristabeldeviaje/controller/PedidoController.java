@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class PedidoController {
@@ -38,9 +37,14 @@ public class PedidoController {
     public String finalizarPedido(HttpSession session) {
 
         String email = (String) session.getAttribute("usuario_email");
+        String rol = (String) session.getAttribute("usuario_rol");
 
         if (email == null) {
             return "redirect:/login";
+        }
+
+        if ("admin".equalsIgnoreCase(rol)) {
+            return "redirect:/?adminNoCompra";
         }
 
         var carrito = carritoService.getItems();
@@ -117,7 +121,7 @@ public class PedidoController {
             return "redirect:/login";
         }
 
-        List<Pedido> pedidos = pedidoRepository.findByUsuario(usuario);
+        List<Pedido> pedidos = pedidoRepository.findByUsuarioOrderByFechaDesc(usuario);
         model.addAttribute("pedidos", pedidos);
 
         return "mis-pedidos";

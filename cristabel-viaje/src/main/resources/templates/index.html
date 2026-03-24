@@ -29,17 +29,48 @@
 
         <div class="card-body text-center">
           <h5 class="card-title" th:text="${producto.nombre != null ? producto.nombre : 'Producto sin nombre'}">Nombre</h5>
+          <div th:if="${medias[producto.id] > 0}"
+               style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px;">
+
+            <div style="color: #FFC107;">
+              <span th:text="${medias[producto.id] >= 1 ? '★' : '☆'}"></span>
+              <span th:text="${medias[producto.id] >= 2 ? '★' : '☆'}"></span>
+              <span th:text="${medias[producto.id] >= 3 ? '★' : '☆'}"></span>
+              <span th:text="${medias[producto.id] >= 4 ? '★' : '☆'}"></span>
+              <span th:text="${medias[producto.id] >= 5 ? '★' : '☆'}"></span>
+            </div>
+
+            <small style="color: #666;">
+              (<span th:text="${#numbers.formatDecimal(medias[producto.id], 1, 1)}">0.0</span>)
+            </small>
+
+          </div>
           <p class="fw-bold text-primary" th:text="${producto.precio != null ? producto.precio + ' €' : '0.00 €'}"></p>
 
           <div class="d-grid gap-2">
-            <a th:href="@{'/producto/' + ${producto.id}}" class="btn btn-outline-secondary">Ver detalles</a>
 
-            <form th:action="@{/carrito/add}" method="post">
+            <!-- Producto SIN variantes -->
+            <a th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
+               th:href="@{'/producto/' + ${producto.id}}"
+               class="btn btn-outline-secondary">
+              Ver detalles
+            </a>
+
+            <form th:if="${(producto.tallas == null or #strings.isEmpty(producto.tallas)) and (producto.colores == null or #strings.isEmpty(producto.colores))}"
+                  th:action="@{/carrito/add}" method="post" style="margin: 0;">
               <input type="hidden" name="id" th:value="${producto.id}">
-              <button type="submit" class="btn btn-primary btn-lg px-5 w-100">
+              <button type="submit" class="btn btn-primary btn-lg w-100">
                 🛒 Añadir al carrito
               </button>
             </form>
+
+            <!-- Producto CON variantes -->
+            <a th:if="${(producto.tallas != null and !#strings.isEmpty(producto.tallas)) or (producto.colores != null and !#strings.isEmpty(producto.colores))}"
+               th:href="@{'/producto/' + ${producto.id}}"
+               class="btn btn-primary btn-lg w-100">
+              Ver producto
+            </a>
+
           </div>
         </div>
       </div>

@@ -3,30 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <title>Registro</title>
-
   <th:block th:replace="~{fragments/head :: head}"></th:block>
-
 </head>
 <body>
+
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-<main class="contenedor" style="max-width: 400px; margin: auto; padding: 20px;">
-  <h2>Nuevo Usuario</h2>
+
+<main class="contenedor" style="max-width: 500px; margin: auto; padding: 20px;">
+  <h2>Crear cuenta</h2>
+
   <form th:action="@{/register}" th:object="${usuario}" method="post">
+
+    <div th:if="${error}" style="background:#f8d7da; color:#721c24; padding:10px; border-radius:5px; margin-bottom:15px;">
+      <span th:text="${error}"></span>
+    </div>
+
     <div style="margin-bottom: 15px;">
-      <label>Nombre:</label><br>
+      <label>Nombre:</label>
       <input type="text" th:field="*{nombre}" required style="width: 100%;">
     </div>
+
     <div style="margin-bottom: 15px;">
-      <label>Email:</label><br>
+      <label>Apellidos:</label>
+      <input type="text" th:field="*{apellidos}" required style="width: 100%;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Email:</label>
       <input type="email" th:field="*{email}" required style="width: 100%;">
     </div>
+
     <div style="margin-bottom: 15px;">
-      <label>Contraseña:</label><br>
+      <label>Contraseña:</label>
       <input type="password" th:field="*{password}" required style="width: 100%;">
     </div>
-    <button type="submit" class="boton-carrito" style="width: 100%; border: none; cursor: pointer; padding: 10px;">Crear cuenta</button>
+
+    <div style="margin-bottom: 15px;">
+      <label>Repetir contraseña:</label>
+      <input type="password" name="confirmPassword" required style="width: 100%;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Dirección:</label>
+      <input type="text" th:field="*{direccion}" style="width: 100%;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Comunidad Autónoma:</label>
+      <select th:field="*{comunidad}" style="width: 100%;">
+        <option value="">Selecciona comunidad</option>
+        <option>Andalucía</option>
+        <option>Aragón</option>
+        <option>Asturias</option>
+        <option>Baleares</option>
+        <option>Canarias</option>
+        <option>Cantabria</option>
+        <option>Castilla-La Mancha</option>
+        <option>Castilla y León</option>
+        <option>Cataluña</option>
+        <option>Comunidad Valenciana</option>
+        <option>Extremadura</option>
+        <option>Galicia</option>
+        <option>Madrid</option>
+        <option>Murcia</option>
+        <option>Navarra</option>
+        <option>País Vasco</option>
+        <option>La Rioja</option>
+        <option>Ceuta</option>
+        <option>Melilla</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>País:</label>
+      <input type="text" th:field="*{pais}" value="España" style="width: 100%;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Teléfono:</label>
+      <input type="tel" th:field="*{telefono}" pattern="[0-9]{9}" placeholder="600123456" style="width: 100%;">
+    </div>
+
+    <button type="submit" class="btn-admin" style="width: 100%;">
+      Crear cuenta
+    </button>
+
   </form>
 </main>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 </html>
